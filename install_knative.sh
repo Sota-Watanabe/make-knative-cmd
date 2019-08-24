@@ -63,29 +63,16 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846
 
 kubectl taint nodes --all node-role.kubernetes.io/master-
 # ?
-<< COMMENTOUT
-Your Kubernetes control-plane has initialized successfully!
-
-To start using your cluster, you need to run the following as a regular user:
-
-  mkdir -p $HOME/.kube
-  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-  sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-You should now deploy a pod network to the cluster.
-Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-  https://kubernetes.io/docs/concepts/cluster-administration/addons/
-
-Then you can join any number of worker nodes by running the following on each as root:
-
-kubeadm join 172.28.32.125:6443 --token thj1k1.d04lr2sorssaco6i \
-    --discovery-token-ca-cert-hash sha256:50f50e8952f134c02817af2bfc6a3e2b2d656adf8a5cbedf5314353dd20ed128 
-COMMENTOUT
 
 # install helm
 sudo snap install helm --classic
 helm init --history-max 200
+# install istio
+export ISTIO_VERSION=1.1.7
+curl -L https://git.io/getLatestIstio | sh -
+cd istio-${ISTIO_VERSION}
 for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
+
 
 cat <<EOF | kubectl apply -f -
    apiVersion: v1
