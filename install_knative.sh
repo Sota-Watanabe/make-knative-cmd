@@ -56,6 +56,12 @@ apt-mark hold kubelet kubeadm kubectl
 # init kubeadm
 # docker version not support!
 kubeadm init --pod-network-cidr=10.244.0.0/16
+
+# add other terminal
+mkdir -p $HOME/.kube
+cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+
 export KUBECONFIG=/etc/kubernetes/admin.conf# ???
 
 # cat /proc/sys/net/bridge/bridge-nf-call-iptables 
