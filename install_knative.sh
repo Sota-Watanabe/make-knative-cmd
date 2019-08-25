@@ -142,15 +142,17 @@ helm template --namespace=istio-system \
 
 kubectl apply -f istio-local-gateway.yaml
 
+# cleanup knative
 kubectl delete svc knative-ingressgateway -n istio-system
 kubectl delete deploy knative-ingressgateway -n istio-system
 kubectl delete statefulset/controller-manager -n knative-sources
 
+# prevents race conditions 
 kubectl apply --selector knative.dev/crd-install=true \
    --filename https://github.com/knative/serving/releases/download/v0.8.0/serving.yaml \
    --filename https://github.com/knative/eventing/releases/download/v0.8.0/eventing.yaml \
    --filename https://github.com/knative/serving/releases/download/v0.8.0/monitoring.yaml
-
+# install knative
 kubectl apply --filename https://github.com/knative/serving/releases/download/v0.8.0/serving.yaml \
    --filename https://github.com/knative/eventing/releases/download/v0.8.0/eventing.yaml \
    --filename https://github.com/knative/serving/releases/download/v0.8.0/monitoring.yaml
