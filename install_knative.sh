@@ -58,7 +58,8 @@ apt-mark hold kubelet kubeadm kubectl
 kubeadm init --pod-network-cidr=10.244.0.0/16
 export KUBECONFIG=/etc/kubernetes/admin.conf# ???
 
-# check /proc/sys/net/bridge/bridge-nf-call-iptables >> 1
+# cat /proc/sys/net/bridge/bridge-nf-call-iptables 
+# check "1"
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
 
 kubectl taint nodes --all node-role.kubernetes.io/master-
