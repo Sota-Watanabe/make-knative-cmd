@@ -68,8 +68,8 @@ export KUBECONFIG=/etc/kubernetes/admin.conf# ???
 # check "1"
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
 
+# for tiller pod running
 kubectl taint nodes --all node-role.kubernetes.io/master-
-# ?
 
 # install helm
 sudo snap install helm --classic
