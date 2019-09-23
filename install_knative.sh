@@ -24,19 +24,8 @@ add-apt-repository \
   stable"
 
 ## Install Docker CE.
-apt-get update && apt-get install docker-ce
+apt-get update && apt-get install docker-ce=19.03.2
 
-# Setup daemon.
-cat > /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "100m"
-  },
-  "storage-driver": "overlay2"
-}
-EOF
 
 mkdir -p /etc/systemd/system/docker.service.d
 
@@ -51,22 +40,27 @@ cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get update
-apt-get install -y kubelet kubeadm kubectl
+apt-get install -y kubelet=1.15.4-00 - 
+apt-get install -y kubeadm=1.15.4-00 - 
+apt-get install -y kubectl=1.15.4-00 - 
 apt-mark hold kubelet kubeadm kubectl
 # init kubeadm
 # docker version not support!
 kubeadm init --pod-network-cidr=10.244.0.0/16
-
+exit
 # add other terminal
-mkdir -p $HOME/.kube
-cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
-chown $(id -u):$(id -g) $HOME/.kube/config
+sudo mkdir -p $HOME/.kube
+sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-export KUBECONFIG=/etc/kubernetes/admin.conf# ???
+# exit && login
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # cat /proc/sys/net/bridge/bridge-nf-call-iptables 
 # check "1"
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
+# if you install not kubeadm=1.15.4-00 - , show error
 
 # for tiller pod running
 kubectl taint nodes --all node-role.kubernetes.io/master-
@@ -74,7 +68,8 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 # install helm
 sudo snap install helm --classic
 helm init --history-max 200
-# install istio
+if you install 
+# if you install not kubeadm=1.15.4-00 - , show error
 export ISTIO_VERSION=1.1.7
 curl -L https://git.io/getLatestIstio | sh -
 cd istio-${ISTIO_VERSION}
